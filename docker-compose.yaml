@@ -1,0 +1,64 @@
+version: '3.0'
+
+services:
+
+  app:
+    container_name: new_project_app
+    build:
+      context: .
+      dockerfile: .docker/app/Dockerfile
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    env_file:
+      - './app/.env'
+
+  webserver:
+    container_name: new_project_webserver
+    build:
+      context: .
+      dockerfile: .docker/webserver/Dockerfile
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    ports:
+      - "8080:80" 
+
+  db:
+    container_name: new_project_db
+    image: 'bitnami/postgresql:15.0.0'
+    volumes:
+      - 'db_data:/bitnami/postgresql'
+    environment:
+      POSTGRESQL_USERNAME: db_user
+      POSTGRESQL_PASSWORD: db_pass
+      POSTGRESQL_DATABASE: app
+
+  cron:
+    container_name: lesson_new_cron
+    build:
+    context: .
+    dockerfile: .docker/app/Dockerfile.cron
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    env_file:
+      - ./app/.env
+
+  jobs:
+    container_name: lesson_new_jobs
+    build:
+    context: .
+    dockerfile: .docker/app/Dockerfile
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    env_file:
+      - ./app/.env
+    entrypoint: ['php', 'artisan', 'queue:work']
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+        
