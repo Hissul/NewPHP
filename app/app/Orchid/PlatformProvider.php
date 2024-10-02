@@ -34,7 +34,7 @@ class PlatformProvider extends OrchidServiceProvider
     public function menu(): array
     {
         return [
-            /*Menu::make('Get Started')
+            Menu::make('Get Started')
                 ->icon('bs.book')
                 ->title('Navigation')
                 ->route(config('platform.index')),
@@ -66,7 +66,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.example.cards')
                 ->divider(),
 
-         */   Menu::make(__('Users'))
+            Menu::make(__('Users'))
                 ->icon('bs.people')
                 ->route('platform.systems.users')
                 ->permission('platform.systems.users')
